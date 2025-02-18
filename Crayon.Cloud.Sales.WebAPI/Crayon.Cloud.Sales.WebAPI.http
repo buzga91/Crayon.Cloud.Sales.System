@@ -1,0 +1,6 @@
+@Crayon.Cloud.Sales.WebAPI_HostAddress = http://localhost:5035
+
+GET {{Crayon.Cloud.Sales.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
