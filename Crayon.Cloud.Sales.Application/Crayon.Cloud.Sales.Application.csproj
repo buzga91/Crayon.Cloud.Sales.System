@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Crayon.Cloud.Sales.Integration\Crayon.Cloud.Sales.Integration.csproj" />
+    <ProjectReference Include="..\Crayon.Cloud.Sales.Shared\Crayon.Cloud.Sales.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

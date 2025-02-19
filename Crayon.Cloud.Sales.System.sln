@@ -3,7 +3,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crayon.Cloud.Sales.WebAPI", "Crayon.Cloud.Sales.WebAPI\Crayon.Cloud.Sales.WebAPI.csproj", "{53531480-ABF5-4204-C37F-B3CA88B3EE80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crayon.Cloud.Sales.Integration", "Crayon.Cloud.Sales.Integration\Crayon.Cloud.Sales.Integration.csproj", "{B523F813-A72A-46D9-9FEE-93525B17A059}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crayon.Cloud.Sales.Shared", "Crayon.Cloud.Sales.Shared\Crayon.Cloud.Sales.Shared.csproj", "{C8661AF7-1E8A-4AB6-97DE-25D97715CDC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crayon.Cloud.Sales.Domain", "Crayon.Cloud.Sales.Domain\Crayon.Cloud.Sales.Domain.csproj", "{2F17051C-C900-491F-99F7-F2BD77397599}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crayon.Cloud.Sales.Application", "Crayon.Cloud.Sales.Application\Crayon.Cloud.Sales.Application.csproj", "{5F9BE834-CC41-4601-851A-A9CD019215FC}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53531480-ABF5-4204-C37F-B3CA88B3EE80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53531480-ABF5-4204-C37F-B3CA88B3EE80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53531480-ABF5-4204-C37F-B3CA88B3EE80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53531480-ABF5-4204-C37F-B3CA88B3EE80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B523F813-A72A-46D9-9FEE-93525B17A059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B523F813-A72A-46D9-9FEE-93525B17A059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B523F813-A72A-46D9-9FEE-93525B17A059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B523F813-A72A-46D9-9FEE-93525B17A059}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8661AF7-1E8A-4AB6-97DE-25D97715CDC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8661AF7-1E8A-4AB6-97DE-25D97715CDC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8661AF7-1E8A-4AB6-97DE-25D97715CDC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8661AF7-1E8A-4AB6-97DE-25D97715CDC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F17051C-C900-491F-99F7-F2BD77397599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F17051C-C900-491F-99F7-F2BD77397599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F17051C-C900-491F-99F7-F2BD77397599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F17051C-C900-491F-99F7-F2BD77397599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9BE834-CC41-4601-851A-A9CD019215FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9BE834-CC41-4601-851A-A9CD019215FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9BE834-CC41-4601-851A-A9CD019215FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9BE834-CC41-4601-851A-A9CD019215FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
