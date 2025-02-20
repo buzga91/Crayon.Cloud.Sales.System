@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crayon.Cloud.Sales.Domain
+namespace Crayon.Cloud.Sales.Domain.Models
 {
     public class Account
     {

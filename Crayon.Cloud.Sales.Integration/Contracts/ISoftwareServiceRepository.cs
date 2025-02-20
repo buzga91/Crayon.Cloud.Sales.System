@@ -8,5 +8,6 @@ namespace Crayon.Cloud.Sales.Integration.Contracts
 {
     public interface ISoftwareServiceRepository
     {
+        Task<bool> CancaelSoftwareService(int softwareId, int accountId);
     }
 }

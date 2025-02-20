@@ -1,16 +1,24 @@
-﻿using Crayon.Cloud.Sales.Domain;
+﻿using Crayon.Cloud.Sales.Integration.Context;
 using Crayon.Cloud.Sales.Integration.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Crayon.Cloud.Sales.Integration.Entities;
 
 namespace Crayon.Cloud.Sales.Integration.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        Task<IEnumerable<Account>> IAccountRepository.GetAccounts(int customerId)
+        private readonly ApplicationDbContext context;
+
+        public AccountRepository(ApplicationDbContext context)
+        {
+            this.context = context;
+        }
+
+        public Task<AccountDB> GetAccountById(int accountId)
+        {
+            throw new NotImplementedException();
+        }
+
+       public Task<IEnumerable<AccountDB>> GetAccounts(int customerId)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Crayon.Cloud.Sales.Application.Services;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +9,12 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
+        private readonly AccountService _accountService;
+
+        public AccountsController(AccountService accountService)
+        {
+            _accountService = accountService;
+        }
         // GET: api/<Accounts>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -16,28 +23,11 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
         }
 
         // GET api/<Accounts>/5
-        [HttpGet("{id}")]
-        public string GetAccountsByCustomerId(int customerId)
+        [HttpGet("{customerId}")]
+        public async Task<IActionResult>GetAccountsByCustomerId(int customerId)
         {
-            return "value";
-        }
-
-        // POST api/<Accounts>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<Accounts>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<Accounts>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var result = await _accountService.GetAccounts(customerId);
+            return Ok(result);
         }
     }
 }

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crayon.Cloud.Sales.Domain
+﻿namespace Crayon.Cloud.Sales.Domain.Models
 {
     public enum licenseState
     {
         None = -1,
         Active,
-        Suspend,
         Canceled
     }
     public class License

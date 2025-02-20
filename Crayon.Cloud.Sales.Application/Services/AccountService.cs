@@ -1,15 +1,12 @@
-﻿using Crayon.Cloud.Sales.Domain;
+﻿using Crayon.Cloud.Sales.Application.Contracts;
+using Crayon.Cloud.Sales.Domain.Models;
 using Crayon.Cloud.Sales.Integration.Contracts;
+using Crayon.Cloud.Sales.Integration.Extensions;
 using Crayon.Cloud.Sales.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Crayon.Cloud.Sales.Application.Services
 {
-   public class AccountService
+    public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
 
@@ -18,9 +15,17 @@ namespace Crayon.Cloud.Sales.Application.Services
             _accountRepository = accountRepository;
         }
 
+        public async Task<Result<Account>> GetAccountById(int accountId)
+        {
+            var accountEntitie = await _accountRepository.GetAccountById(accountId);
+            var account = AccountExtensions.ToDomain(accountEntitie);
+            return Result<Account>.Success(account);
+        }
+
         public async Task<Result<IEnumerable<Account>>> GetAccounts(int customerId)
         {
-             var accounts = await _accountRepository.GetAccounts(customerId);
+            var accountEntities = await _accountRepository.GetAccounts(customerId);
+            var accounts = AccountExtensions.ToDomainCollection(accountEntities);
             return Result<IEnumerable<Account>>.Success(accounts);
         }
     }
