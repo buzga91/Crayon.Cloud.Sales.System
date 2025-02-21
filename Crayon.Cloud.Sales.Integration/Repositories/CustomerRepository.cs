@@ -1,6 +1,7 @@
 ﻿using Crayon.Cloud.Sales.Integration.ContextDB;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Entities;
+using Crayon.Cloud.Sales.Shared;
 
 namespace Crayon.Cloud.Sales.Integration.Repositories
 {
@@ -12,7 +13,7 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
         {
             _context = context;
         }
-        public async Task<CustomerDB> GetCustomerById(int customerId)
+        public async Task<Result<CustomerDB>> GetCustomerById(int customerId)
         {
             var customer = new CustomerDB();
             using (_context)
@@ -28,9 +29,14 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
                              Name = cu.Name
                          }).FirstOrDefault();
 
-                if (customer is null) Console.WriteLine($"There is no customer for specifi id:{customerId}");
+                if (customer is null)
+                {
+                    string message = $"There is no customer for specifi id:{customerId}";
+                    Console.WriteLine(message);
+                    return Result<CustomerDB>.Failure(message);
+                }
             }
-            return customer;
+            return Result<CustomerDB>.Success(customer);
         }
     }
 }

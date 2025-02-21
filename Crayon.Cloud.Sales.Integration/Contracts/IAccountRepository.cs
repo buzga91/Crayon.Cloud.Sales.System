@@ -1,10 +1,11 @@
 ﻿using Crayon.Cloud.Sales.Integration.Entities;
+using Crayon.Cloud.Sales.Shared;
 
 namespace Crayon.Cloud.Sales.Integration.Contracts
 {
     public interface IAccountRepository
     {
-        Task<IEnumerable<AccountDB>> GetAccounts(int customerId);
-        Task<AccountDB> GetAccountById(int accountId);
+        Task<Result<IEnumerable<AccountDB>>> GetAccounts(int customerId);
+        Task<Result<AccountDB>> GetAccountById(int accountId);
     }
 }

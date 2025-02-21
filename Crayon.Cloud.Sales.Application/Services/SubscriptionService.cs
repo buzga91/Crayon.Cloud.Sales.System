@@ -1,4 +1,5 @@
 ﻿using Crayon.Cloud.Sales.Application.Contracts;
+using Crayon.Cloud.Sales.Domain.Exceptions;
 using Crayon.Cloud.Sales.Domain.Extensions;
 using Crayon.Cloud.Sales.Domain.Models;
 using Crayon.Cloud.Sales.Integration.Contracts;
@@ -47,7 +48,8 @@ namespace Crayon.Cloud.Sales.Application.Services
         public async Task<Result<IEnumerable<Subscription>>> GetSubscriptionsForSpecificAccount(int accountId)
         {
             var subscriptions = await _subscriptionRepository.GetSubscriptionsByAccountId(accountId);
-            var domainSubscription = SubscriptionExtensions.ToDomainCollection(subscriptions);
+            if (!subscriptions.IsSuccess) throw new SubscriptionException(subscriptions.Error);
+            var domainSubscription = SubscriptionExtensions.ToDomainCollection(subscriptions.Value);
             return Result<IEnumerable<Subscription>>.Success(domainSubscription);
         }
 
@@ -57,17 +59,19 @@ namespace Crayon.Cloud.Sales.Application.Services
             if(!availableSubscription.IsSuccess) return Result<Subscription>.Failure(availableSubscription.Error);
 
             var accountEntity = await _accountRepository.GetAccountById(subscription.AccountId);
-            var customer = await _customerRepository.GetCustomerById(accountEntity.Id);
+            if (!accountEntity.IsSuccess) throw new AccountException(accountEntity.Error);
+            var customer = await _customerRepository.GetCustomerById(accountEntity.Value.Id);
+            if (!customer.IsSuccess) throw new CustomerException(customer.Error);
 
-            var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription, customer.CustomerCcpId);
+            var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription, customer.Value.CustomerCcpId);
             var result = await _softwareService.ProvisionSoftware(softwareDTO);
 
-            if(!result.IsSuccess) return Result<Subscription>.Failure(result.Error);
+            if (!result.IsSuccess) throw new SubscriptionException(result.Error);
 
             subscription.MaxQuantity = availableSubscription.Value.MaxQuantity;
             subscription.MinQuantity = availableSubscription.Value.MinQuantity;
 
-            var subscriptionEntity = SubscriptionExtensions.ToEntity(subscription, accountEntity);
+            var subscriptionEntity = SubscriptionExtensions.ToEntity(subscription, accountEntity.Value);
 
             await _subscriptionRepository.Add(subscriptionEntity);
             return Result<Subscription>.Success(subscription);

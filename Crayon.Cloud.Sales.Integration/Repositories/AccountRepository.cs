@@ -1,6 +1,7 @@
 ﻿using Crayon.Cloud.Sales.Integration.ContextDB;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Entities;
+using Crayon.Cloud.Sales.Shared;
 
 namespace Crayon.Cloud.Sales.Integration.Repositories
 {
@@ -13,7 +14,7 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             _context = context;
         }
 
-        public async Task<AccountDB> GetAccountById(int accountId)
+        public async Task<Result<AccountDB>> GetAccountById(int accountId)
         {
             var account = new AccountDB();
             using (_context)
@@ -32,12 +33,17 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
                              Subscriptions = ac.Subscriptions
                          }).FirstOrDefault();
 
-                if (account is null) Console.WriteLine($"There is no account for specifi id:{accountId}");
+                if (account is null)
+                {
+                    string message = $"There is no account for specifi id:{accountId}";
+                    Console.WriteLine(message);
+                    return Result<AccountDB>.Failure(message);
+                }
             }
-            return account;
+            return Result<AccountDB>.Success(account);
         }
 
-        public async Task<IEnumerable<AccountDB>> GetAccounts(int customerId)
+        public async Task<Result<IEnumerable<AccountDB>>> GetAccounts(int customerId)
         {
             var accounts = new List<AccountDB>();
             using (_context)
@@ -54,8 +60,14 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
                                 Name = ac.Name,
                                 Subscriptions = ac.Subscriptions
                             }).ToList();
+                if (accounts is null)
+                {
+                    string message = $"There is no account for specifi id:{customerId}";
+                    Console.WriteLine(message);
+                    return Result<IEnumerable<AccountDB>>.Failure(message);
+                }
             }
-            return accounts;
+            return Result<IEnumerable<AccountDB>>.Success(accounts);
         }
     }
 }

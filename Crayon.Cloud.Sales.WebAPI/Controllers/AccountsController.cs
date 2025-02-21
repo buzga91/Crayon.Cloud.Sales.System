@@ -1,4 +1,5 @@
 ﻿using Crayon.Cloud.Sales.Application.Contracts;
+using Crayon.Cloud.Sales.Domain.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crayon.Cloud.Sales.WebAPI.Controllers

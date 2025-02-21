@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Crayon.Cloud.Sales.Domain\Crayon.Cloud.Sales.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
