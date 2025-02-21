@@ -6,6 +6,6 @@
         public string Name { get; set; }
         public int CustomerId { get; set; }
         public CustomerDB Customer { get; set; }
-        public ICollection<LicenseDB> Licenses { get; set; } = new List<LicenseDB>();
+        public ICollection<SubscriptionDB> Subscriptions { get; set; } = new List<SubscriptionDB>();
     }
 }

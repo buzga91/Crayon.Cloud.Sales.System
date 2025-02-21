@@ -16,7 +16,7 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
                     Id = entity.Id,
                     CustomerId = entity.CustomerId,
                     Name = entity.Name,
-                    PurchasedSoftwareLicenses = LicenseExtensions.ToDomainCollection(entity.Licenses)
+                    PurchasedSoftwareLicenses = SubscriptionExtensions.ToDomainCollection(entity.Subscriptions)
                 });
             }
             return domainAccounts;
@@ -29,21 +29,8 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
                 Id = entity.Id,
                 CustomerId = entity.CustomerId,
                 Name = entity.Name,
-                PurchasedSoftwareLicenses = LicenseExtensions.ToDomainCollection(entity.Licenses)
+                PurchasedSoftwareLicenses = SubscriptionExtensions.ToDomainCollection(entity.Subscriptions)
             };
         }
-
-        //public static AccountDB ToEntity(this Account domainAccount, CustomerDB customerEntity)
-        //{
-        //    var accountDB = new AccountDB
-        //    {
-        //        Id = domainAccount.Id,
-        //        CustomerId = domainAccount.CustomerId,
-        //        Name = domainAccount.Name,
-        //        Customer = customerEntity,
-        //    };
-        //    accountDB.Licenses = LicenseExtensions.ToEntities(domainAccount.PurchasedSoftwareLicenses, accountDB);
-        //    return accountDB;
-        //}
     }
 }

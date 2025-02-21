@@ -5,7 +5,8 @@ namespace Crayon.Cloud.Sales.Integration.Contracts
 {
     public interface ICCPClient
     {
+        Task<Result<AvailableSoftwareDTO>> GetAvailableSoftwareServicesById(int softwareId);
         Task<Result<IEnumerable<AvailableSoftwareDTO>>> GetAvailableSoftwareServices();
-        Task<Result<PurchasedSoftwareDTO>> ProvisionNewLicense(PurchasedSoftwareDTO softwareService);
+        Task<Result<PurchasedSoftwareDTO>> ProvisionSoftware(ProvisionSoftwareDTO provisionSoftwareDTO);
     }
 }

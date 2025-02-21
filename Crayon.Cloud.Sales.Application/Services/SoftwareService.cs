@@ -9,7 +9,7 @@ namespace Crayon.Cloud.Sales.Application.Services
     {
         private readonly ICCPClient ccpClient;
 
-        public SoftwareService(ICCPClient ccpClient, ISoftwareServiceRepository softwareServiceRepository)
+        public SoftwareService(ICCPClient ccpClient)
         {
             this.ccpClient = ccpClient;
         }
@@ -18,9 +18,15 @@ namespace Crayon.Cloud.Sales.Application.Services
         {
             return await ccpClient.GetAvailableSoftwareServices();
         }
-        public async Task<Result<PurchasedSoftwareDTO>> ProvisionNewLicense(PurchasedSoftwareDTO softwareService)
+
+        public async Task<Result<AvailableSoftwareDTO>> GetAvailableSoftwareServicesById(int softwareId)
         {
-            return await ccpClient.ProvisionNewLicense(softwareService);
+            return await ccpClient.GetAvailableSoftwareServicesById(softwareId);
+        }
+
+        public async Task<Result<PurchasedSoftwareDTO>> ProvisionSoftware(ProvisionSoftwareDTO provisionSoftwareDTO)
+        {
+            return await ccpClient.ProvisionSoftware(provisionSoftwareDTO);
         }
     }
 }

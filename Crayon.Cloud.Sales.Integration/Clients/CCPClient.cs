@@ -1,16 +1,12 @@
 ﻿using Crayon.Cloud.Sales.Integration.Contracts;
+using Crayon.Cloud.Sales.Integration.Extensions;
 using Crayon.Cloud.Sales.Shared;
 using Crayon.Cloud.Sales.Shared.DTO;
-using Moq;
-using System.Text;
-using System.Text.Json;
 
 namespace Crayon.Cloud.Sales.Integration.Clients
 {
     public class CCPClient : ICCPClient
     {
-        private readonly string _baseAddress;
-        private readonly Mock<HttpClient> _httpClient;
         private List<AvailableSoftwareDTO> availableSoftwares = new List<AvailableSoftwareDTO>()
             {
                 new AvailableSoftwareDTO()
@@ -37,41 +33,67 @@ namespace Crayon.Cloud.Sales.Integration.Clients
                     MaxQuantity = 100,
                     Description = "Microsoft E1 Software"
                 },
+                 new AvailableSoftwareDTO()
+                {
+                    Id = 4,
+                     Name = "Microsoft E2",
+                     MinQuantity = 1,
+                    MaxQuantity = 10000,
+                    Description = "Microsoft E2 Software"
+                },
+                   new AvailableSoftwareDTO()
+                {
+                    Id = 5,
+                     Name = "Microsoft Teams",
+                     MinQuantity = 1,
+                    MaxQuantity = 2000,
+                    Description = "Microsoft Teams Software"
+                },
+                     new AvailableSoftwareDTO()
+                {
+                    Id = 6,
+                     Name = "Microsoft E3",
+                     MinQuantity = 1,
+                    MaxQuantity = 3000,
+                    Description = "Microsoft E3 Software"
+                },
+                       new AvailableSoftwareDTO()
+                {
+                    Id = 7,
+                     Name = "Microsoft E4",
+                     MinQuantity = 1,
+                    MaxQuantity = 4000,
+                    Description = "Microsoft E4 Software"
+                },
+                         new AvailableSoftwareDTO()
+                {
+                    Id = 8,
+                     Name = "Microsoft E5",
+                     MinQuantity = 1,
+                    MaxQuantity = 5000,
+                    Description = "Microsoft E5 Software"
+                },
             };
-        public CCPClient(string baseAddress, Mock<HttpClient> httpClient)
-        {
-            _baseAddress = baseAddress;
-            _httpClient = httpClient;
-            SetupHttpClient();
-        }
 
-        private void SetupHttpClient()
+        public async Task<Result<AvailableSoftwareDTO>> GetAvailableSoftwareServicesById(int softwareId)
         {
-            var getAsyncJsonResponse = JsonSerializer.Serialize(availableSoftwares);
-            _httpClient.Setup(x => x.GetAsync(It.IsAny<string>())).Returns(Task.FromResult(new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = new StringContent(getAsyncJsonResponse, Encoding.UTF8, "application/json") }));
-
+            var availableSoftwareService = availableSoftwares.FirstOrDefault(x => x.Id == softwareId);
+            if (availableSoftwareService is null) return Result<AvailableSoftwareDTO>.Failure("Software doesn't exist, please try with availabe software Id");
+            return Result<AvailableSoftwareDTO>.Success(availableSoftwareService);
         }
         public async Task<Result<IEnumerable<AvailableSoftwareDTO>>> GetAvailableSoftwareServices()
         {
-            var response = await _httpClient.Object.GetAsync(_baseAddress);
-            var softwares = JsonSerializer.Deserialize<List<AvailableSoftwareDTO>>(response.Content.ToString());
-            return Result<IEnumerable<AvailableSoftwareDTO>>.Success(softwares);
+            return Result<IEnumerable<AvailableSoftwareDTO>>.Success(availableSoftwares);
         }
 
-        public async Task<Result<PurchasedSoftwareDTO>> ProvisionNewLicense(PurchasedSoftwareDTO softwareService)
+        public async Task<Result<PurchasedSoftwareDTO>> ProvisionSoftware(ProvisionSoftwareDTO provisionSoftwareDTO)
         {
-
-            if (availableSoftwares.Any(x => x.Name == softwareService.Name))
-            {
-                var jsonResponse = JsonSerializer.Serialize(softwareService);
-                var content = new StringContent(jsonResponse, Encoding.UTF8, "application/json");
-                _httpClient.Setup(x => x.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).Returns(Task.FromResult(new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = new StringContent(jsonResponse, Encoding.UTF8, "application/json") }));
-
-                var response = await _httpClient.Object.PostAsync(_baseAddress, content);
-                var purchasedSoftware = JsonSerializer.Deserialize<PurchasedSoftwareDTO>(response.Content.ToString());
-                return Result<PurchasedSoftwareDTO>.Success(purchasedSoftware);
-            }
-            return Result<PurchasedSoftwareDTO>.Failure("Provisioning failure. Please try to provision one of the available softwares.");
+            var availableSoftware = availableSoftwares.FirstOrDefault(x => x.Id == provisionSoftwareDTO.Id);
+            if (availableSoftware is null) Result<PurchasedSoftwareDTO>.Failure("Provisioning failure. Please try to provision one of the available softwares.");
+            if (provisionSoftwareDTO.Quantity > availableSoftware.MaxQuantity
+                || provisionSoftwareDTO.Quantity < availableSoftware.MinQuantity) Result<PurchasedSoftwareDTO>.Failure("Provisioning failure. License quantity can't be more then maximum license value, or less then minimum license quantity value. Check the values from available softwares!");
+            var purchasedSoftwareDto = SoftwareExtensions.ToCcpPurchasedDto(provisionSoftwareDTO, availableSoftware.Name);
+            return Result<PurchasedSoftwareDTO>.Success(purchasedSoftwareDto);
         }
     }
 }

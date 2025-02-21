@@ -15,6 +15,6 @@ namespace Crayon.Cloud.Sales.Domain.Models
         public string Name { get; set; }
         [Required(ErrorMessage = "CustomerId is required")]
         public int CustomerId { get; set; }
-        public IEnumerable<License> PurchasedSoftwareLicenses { get; set; }
+        public IEnumerable<Subscription> PurchasedSoftwareLicenses { get; set; }
     }
 }
