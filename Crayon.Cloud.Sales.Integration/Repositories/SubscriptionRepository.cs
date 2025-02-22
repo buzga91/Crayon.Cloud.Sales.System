@@ -1,4 +1,5 @@
-﻿using Crayon.Cloud.Sales.Integration.ContextDB;
+﻿using Crayon.Cloud.Sales.Domain.Models;
+using Crayon.Cloud.Sales.Integration.ContextDB;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Entities;
 using Crayon.Cloud.Sales.Shared;
@@ -39,7 +40,13 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
                 .FirstOrDefault();
             if (subscription == null)
             {
-                string message = $"Subscription with {subscriptionId} id doesn't exist";
+                string message = $"Subscription with id:{subscriptionId}  doesn't exist";
+                Console.WriteLine(message);
+                return Result.Failure(message);
+            }
+            if(subscription.State == state)
+            {
+                string message = $"Subscription with id:{subscriptionId} is already in provided state. Subscriptin state:{subscription.State}, new proviced state:{state}";
                 Console.WriteLine(message);
                 return Result.Failure(message);
             }
@@ -53,11 +60,17 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
                 .FirstOrDefault();
             if (subscription == null)
             {
-                string message = $"Subscription with {subscriptionId} id doesn't exist";
+                string message = $"Subscription with id:{subscriptionId}  doesn't exist";
                 Console.WriteLine(message);
                 return Result.Failure(message);
             }
-            subscription.ValidTo = validTo;
+            else if(subscription.ValidTo >= validTo)
+            {
+                string message = $"New valid to date {validTo} must be greater then current valid date time {subscription.ValidTo}";
+                Console.WriteLine(message);
+                return Result.Failure(message);
+            }
+                subscription.ValidTo = validTo;
             await _context.SaveChangesAsync();
             return Result.Success();
         }
@@ -68,7 +81,7 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
                .FirstOrDefault();
             if (subscription == null)
             {
-                string message = $"Subscription with {subscriptionId} id doesn't exist";
+                string message = $"Subscription with id:{subscriptionId} doesn't exist";
                 Console.WriteLine(message);
                 return Result.Failure(message);
             }

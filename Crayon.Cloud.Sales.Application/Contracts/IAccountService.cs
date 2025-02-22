@@ -1,11 +1,11 @@
-﻿using Crayon.Cloud.Sales.Domain.Models;
-using Crayon.Cloud.Sales.Shared;
+﻿using Crayon.Cloud.Sales.Shared;
+using Crayon.Cloud.Sales.Shared.DTO;
 
 namespace Crayon.Cloud.Sales.Application.Contracts
 {
     public interface IAccountService
     {
-        Task<Result<IEnumerable<Account>>> GetAccounts(int customerId);
-        Task<Result<Account>> GetAccountById(int accountId);
+        Task<Result<IEnumerable<AccountDTO>>> GetAccounts(int customerId);
+        Task<Result<AccountDTO>> GetAccountById(int accountId);
     }
 }

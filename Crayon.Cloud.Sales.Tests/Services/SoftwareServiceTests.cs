@@ -23,8 +23,8 @@ namespace Crayon.Cloud.Sales.Tests.Services
             // Arrange
             var softwareList = new List<AvailableSoftwareDTO>
             {
-                new AvailableSoftwareDTO { Id = 1, Name = "Software 1" },
-                new AvailableSoftwareDTO { Id = 2, Name = "Software 2" }
+                new AvailableSoftwareDTO { Id = 1, Name = "Software 1",Description = "Test description 1", MaxQuantity = 1000, MinQuantity = 1 },
+                new AvailableSoftwareDTO { Id = 2, Name = "Software 2",Description = "Test description 2", MaxQuantity = 500, MinQuantity = 1 }
             };
 
             _ccpClientMock
@@ -64,7 +64,7 @@ namespace Crayon.Cloud.Sales.Tests.Services
         {
             // Arrange
             var softwareId = 1;
-            var software = new AvailableSoftwareDTO { Id = softwareId, Name = "Software 1" };
+            var software = new AvailableSoftwareDTO { Id = softwareId, Name = "Software 1",Description = "Test description", MaxQuantity = 1000, MinQuantity = 1 };
 
             _ccpClientMock
                 .Setup(client => client.GetAvailableSoftwareServicesById(softwareId))

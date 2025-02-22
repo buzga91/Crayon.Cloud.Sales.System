@@ -2,7 +2,6 @@
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Entities;
 using Crayon.Cloud.Sales.Shared;
-using Microsoft.EntityFrameworkCore;
 
 namespace Crayon.Cloud.Sales.Integration.Repositories
 {

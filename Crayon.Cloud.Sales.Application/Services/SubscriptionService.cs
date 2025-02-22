@@ -49,28 +49,30 @@ namespace Crayon.Cloud.Sales.Application.Services
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<Subscription>>> GetSubscriptionsForSpecificAccount(int accountId)
+        public async Task<Result<IEnumerable<SubscriptionDTO>>> GetSubscriptionsForSpecificAccount(int accountId)
         {
             var subscriptions = await _subscriptionRepository.GetSubscriptionsByAccountId(accountId);
-            if (!subscriptions.IsSuccess) return Result<IEnumerable<Subscription>>.Failure(subscriptions.Error);
-            var domainSubscription = SubscriptionExtensions.ToDomainCollection(subscriptions.Value);
-            return Result<IEnumerable<Subscription>>.Success(domainSubscription);
+            if (!subscriptions.IsSuccess) return Result<IEnumerable<SubscriptionDTO>>.Failure(subscriptions.Error);
+
+            var domainSubscription = SubscriptionExtensions.ToDtoCollection(subscriptions.Value);
+            return Result<IEnumerable<SubscriptionDTO>>.Success(domainSubscription);
         }
 
-        public async Task<Result<Subscription>> ProvisionSubscription(Subscription subscription)
+        public async Task<Result<SubscriptionDTO>> ProvisionSubscription(Subscription subscription)
         {
             var availableSubscription = await _softwareService.GetAvailableSoftwareServicesById(subscription.SoftwareId);
-            if (!availableSubscription.IsSuccess) return Result<Subscription>.Failure(availableSubscription.Error);
+            if (!availableSubscription.IsSuccess) return Result<SubscriptionDTO>.Failure(availableSubscription.Error);
 
             var accountEntity = await _accountRepository.GetAccountById(subscription.AccountId);
-            if (!accountEntity.IsSuccess) return Result<Subscription>.Failure(accountEntity.Error);
+            if (!accountEntity.IsSuccess) return Result<SubscriptionDTO>.Failure(accountEntity.Error);
+
             var customer = await _customerRepository.GetCustomerById(accountEntity.Value.Id);
-            if (!customer.IsSuccess) return Result<Subscription>.Failure(customer.Error);
+            if (!customer.IsSuccess) return Result<SubscriptionDTO>.Failure(customer.Error);
 
             var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription, customer.Value.CustomerCcpId);
             var result = await _softwareService.ProvisionSoftware(softwareDTO);
 
-            if (!result.IsSuccess) return Result<Subscription>.Failure(result.Error);
+            if (!result.IsSuccess) return Result<SubscriptionDTO>.Failure(result.Error);
 
             subscription.MaxQuantity = availableSubscription.Value.MaxQuantity;
             subscription.MinQuantity = availableSubscription.Value.MinQuantity;
@@ -78,7 +80,9 @@ namespace Crayon.Cloud.Sales.Application.Services
             var subscriptionEntity = SubscriptionExtensions.ToEntity(subscription, accountEntity.Value);
 
             await _subscriptionRepository.Add(subscriptionEntity);
-            return Result<Subscription>.Success(subscription);
+            var subsctiptionDto = SubscriptionExtensions.ToDto(subscriptionEntity);
+
+            return Result<SubscriptionDTO>.Success(subsctiptionDto);
         }
     }
 }

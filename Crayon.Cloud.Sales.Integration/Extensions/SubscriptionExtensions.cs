@@ -83,5 +83,49 @@ namespace Crayon.Cloud.Sales.Domain.Extensions
             }
             return domainLicenses;
         }
+
+        public static IEnumerable<SubscriptionDTO> ToDtoCollection(this IEnumerable<SubscriptionDB> entities)
+        {
+            var domainLicenses = new List<SubscriptionDTO>();
+            foreach (var entity in entities)
+            {
+                var result = Enum.TryParse<licenseState>(entity.State, out licenseState state);
+                if (!result) throw new ArithmeticException($"{nameof(entity.State)} is invalid value");
+
+                domainLicenses.Add(new SubscriptionDTO
+                {
+
+                    AccountId = entity.AccountId,
+                    Id = entity.Id,
+                    Quantity = entity.Quantity,
+                    MinQuantity = entity.MinQuantity,
+                    MaxQuantity = entity.MaxQuantity,
+                    SoftwareName = entity.SoftwareName,
+                    SoftwareId = entity.SoftwareId,
+                    ValidTo = entity.ValidTo,
+                    State = state.ToString()
+                });
+            }
+            return domainLicenses;
+        }
+
+        public static SubscriptionDTO ToDto(this SubscriptionDB entity)
+        {
+            var result = Enum.TryParse<licenseState>(entity.State, out licenseState state);
+            if (!result) throw new ArithmeticException($"{nameof(entity.State)} is invalid value");
+
+            return new SubscriptionDTO
+            {
+                AccountId = entity.AccountId,
+                Id = entity.Id,
+                Quantity = entity.Quantity,
+                MinQuantity = entity.MinQuantity,
+                MaxQuantity = entity.MaxQuantity,
+                SoftwareId = entity.SoftwareId,
+                SoftwareName = entity.SoftwareName,
+                ValidTo = entity.ValidTo,
+                State = state.ToString()
+            };
+        }
     }
 }

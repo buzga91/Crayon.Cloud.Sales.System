@@ -63,8 +63,8 @@ namespace Crayon.Cloud.Sales.Tests.Services
             var customerId = 123;
             var accountEntities = new List<AccountDB>
             {
-                new AccountDB { Id = 1, Name = "Account 1" },
-                new AccountDB { Id = 2, Name = "Account 2" }
+                new AccountDB { Id = 1, Name = "Account 1" , CustomerId = 1, Subscriptions = new List<SubscriptionDB>(), Customer = new CustomerDB() },
+                new AccountDB { Id = 2, Name = "Account 2", CustomerId = 2, Subscriptions = new List<SubscriptionDB>(), Customer = new CustomerDB() }
             };
 
             _accountRepositoryMock

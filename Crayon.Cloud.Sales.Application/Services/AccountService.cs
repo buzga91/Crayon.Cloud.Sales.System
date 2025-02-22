@@ -3,6 +3,7 @@ using Crayon.Cloud.Sales.Domain.Models;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Extensions;
 using Crayon.Cloud.Sales.Shared;
+using Crayon.Cloud.Sales.Shared.DTO;
 
 namespace Crayon.Cloud.Sales.Application.Services
 {
@@ -15,20 +16,20 @@ namespace Crayon.Cloud.Sales.Application.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<Result<Account>> GetAccountById(int accountId)
+        public async Task<Result<AccountDTO>> GetAccountById(int accountId)
         {
             var accountEntitie = await _accountRepository.GetAccountById(accountId);
-            if (!accountEntitie.IsSuccess) return Result<Account>.Failure(accountEntitie.Error);
-            var account = AccountExtensions.ToDomain(accountEntitie.Value);
-            return Result<Account>.Success(account);
+            if (!accountEntitie.IsSuccess) return Result<AccountDTO>.Failure(accountEntitie.Error);
+            var account = AccountExtensions.ToDto(accountEntitie.Value);
+            return Result<AccountDTO>.Success(account);
         }
 
-        public async Task<Result<IEnumerable<Account>>> GetAccounts(int customerId)
+        public async Task<Result<IEnumerable<AccountDTO>>> GetAccounts(int customerId)
         {
             var accountEntities = await _accountRepository.GetAccounts(customerId);
-            if (!accountEntities.IsSuccess) return Result<IEnumerable<Account>>.Failure(accountEntities.Error);
-            var accounts = AccountExtensions.ToDomainCollection(accountEntities.Value);
-            return Result<IEnumerable<Account>>.Success(accounts);
+            if (!accountEntities.IsSuccess) return Result<IEnumerable<AccountDTO>>.Failure(accountEntities.Error);
+            var accounts = AccountExtensions.ToDtoCollection(accountEntities.Value);
+            return Result<IEnumerable<AccountDTO>>.Success(accounts);
         }
     }
 }
