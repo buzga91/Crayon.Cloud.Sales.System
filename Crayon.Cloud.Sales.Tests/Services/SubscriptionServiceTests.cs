@@ -72,51 +72,6 @@ namespace Crayon.Cloud.Sales.Tests.Services
         }
 
         [Fact]
-        public async Task GetSubscriptionsForSpecificAccount_ShouldReturnSubscriptions_WhenRepositoryReturnsSuccess()
-        {
-            // Arrange
-            var accountId = 101;
-            var subscriptions = new List<SubscriptionDB>
-        {
-            new SubscriptionDB { Id = 1, AccountId = accountId, SoftwareId = 2, Quantity = 3, ValidTo = DateTime.Now.AddMonths(1), MaxQuantity = 1000, MinQuantity = 1,State="Active", SoftwareName = "Test software name 1", Account = new AccountDB() },
-            new SubscriptionDB { Id = 2, AccountId = accountId, SoftwareId = 3, Quantity = 5 ,ValidTo = DateTime.Now.AddMonths(1), MaxQuantity = 2000, MinQuantity = 1,State="Active", SoftwareName = "Test software name 2", Account = new AccountDB()}
-        };
-
-            _mockSubscriptionRepo
-                .Setup(repo => repo.GetSubscriptionsByAccountId(accountId))
-                .ReturnsAsync(Result<IEnumerable<SubscriptionDB>>.Success(subscriptions));
-
-            // Act
-            var result = await _subscriptionService.GetSubscriptionsForSpecificAccount(accountId);
-
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.NotNull(result.Value);
-            Assert.Equal(2, result.Value.Count());
-            _mockSubscriptionRepo.Verify(repo => repo.GetSubscriptionsByAccountId(accountId), Times.Once);
-        }
-
-        [Fact]
-        public async Task GetSubscriptionsForSpecificAccount_ShouldReturnFailure_WhenRepositoryReturnsFailure()
-        {
-            // Arrange
-            var accountId = 101;
-            var errorMessage = "Failed to retrieve subscriptions.";
-
-            _mockSubscriptionRepo
-                .Setup(repo => repo.GetSubscriptionsByAccountId(accountId))
-                .ReturnsAsync(Result<IEnumerable<SubscriptionDB>>.Failure(errorMessage));
-
-            // Act
-            var result = await _subscriptionService.GetSubscriptionsForSpecificAccount(accountId);
-
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal(errorMessage, result.Error);
-            _mockSubscriptionRepo.Verify(repo => repo.GetSubscriptionsByAccountId(accountId), Times.Once);
-        }
-
-        [Fact]
         public async Task GetAvailableSoftwaresFromCCP_ShouldReturnSuccess_WhenSoftwareServiceIsSuccessful()
         {
             // Arrange
@@ -233,7 +188,7 @@ namespace Crayon.Cloud.Sales.Tests.Services
             var subscription = new Subscription { SoftwareId = 1, AccountId = 1, MaxQuantity = 100, MinQuantity = 1, Quantity = 1, SoftwareName = "Test software name", Id = 1, State = licenseState.Active, ValidTo = DateTime.Now.AddYears(1) };
             var mockSoftwareResult = Result<AvailableSoftwareDTO>.Success(new AvailableSoftwareDTO {Description = "Test Description", Id = 1, MaxQuantity = 1000, MinQuantity = 1, Name = "Test name"  });
             var mockAccountResult = Result<AccountDB>.Success(new AccountDB { Id = 1 ,Customer = new CustomerDB(), CustomerId = 1 , Name = "Test account name", Subscriptions = new List<SubscriptionDB>() });
-            var mockCustomerResult = Result<CustomerDB>.Success(new CustomerDB { CustomerCcpId = 1, Accounts = new List<AccountDB>(), Id = 1, Name = "Test customer name" });
+            var mockCustomerResult = Result<CustomerDB>.Success(new CustomerDB { Id =1, Name = "Test customer name", Accounts = new List<AccountDB>(), });
             var mockProvisionResult = Result<PurchasedSoftwareDTO>.Success(new PurchasedSoftwareDTO {Name = "Test name", Quantity = 1, State = "Active", ValidTo = DateTime.Now.AddYears(1) });
 
             _mockSoftwareService.Setup(s => s.GetAvailableSoftwareServicesById(subscription.SoftwareId)).ReturnsAsync(mockSoftwareResult);

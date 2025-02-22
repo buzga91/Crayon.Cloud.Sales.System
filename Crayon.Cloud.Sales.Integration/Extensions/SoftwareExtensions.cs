@@ -5,11 +5,11 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
 {
     public static class SoftwareExtensions
     {
-        public static ProvisionSoftwareDTO ToCcpProvisionDto(this Subscription subscription, int customerCcpId)
+        public static ProvisionSoftwareDTO ToCcpProvisionDto(this Subscription subscription)
         {
             return new ProvisionSoftwareDTO
             {
-                CustomerCcpId = customerCcpId,
+                AccountId = subscription.AccountId,
                 Id = subscription.SoftwareId,
                 ValidTo = subscription.ValidTo,
                 State = subscription.State.ToString(),

@@ -15,9 +15,9 @@ namespace Crayon.Cloud.Sales.Integration.ContextDB
 
             var customers = new CustomerDB[]
             {
-            new CustomerDB { Name = "Customer A", CustomerCcpId  = 1000 },
-            new CustomerDB { Name = "Customer B", CustomerCcpId  = 2000 },
-            new CustomerDB { Name = "Customer C", CustomerCcpId  = 3000 }
+            new CustomerDB { Name = "Customer A", Id  = 1 },
+            new CustomerDB { Name = "Customer B", Id  = 2 },
+            new CustomerDB { Name = "Customer C", Id  = 3 }
         };
 
             context.Customers.AddRange(customers);

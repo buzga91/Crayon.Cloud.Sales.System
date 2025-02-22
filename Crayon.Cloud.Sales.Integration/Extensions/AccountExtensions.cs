@@ -25,10 +25,25 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
 
         public static IEnumerable<AccountDTO> ToDtoCollection(this IEnumerable<AccountDB> entities)
         {
-            var domainAccounts = new List<AccountDTO>();
+            var dtoAccounts = new List<AccountDTO>();
             foreach (var entity in entities)
             {
-                domainAccounts.Add(new AccountDTO
+                dtoAccounts.Add(new AccountDTO
+                {
+                    Id = entity.Id,
+                    CustomerId = entity.CustomerId,
+                    Name = entity.Name
+                });
+            }
+            return dtoAccounts;
+        }
+
+        public static IEnumerable<AccountWithPurchasedSubscriptionsDTO> ToDtoCollectionWithPurchasedSubscriptions(this IEnumerable<AccountDB> entities)
+        {
+            var dtoAccounts = new List<AccountWithPurchasedSubscriptionsDTO>();
+            foreach (var entity in entities)
+            {
+                dtoAccounts.Add(new AccountWithPurchasedSubscriptionsDTO
                 {
                     Id = entity.Id,
                     CustomerId = entity.CustomerId,
@@ -36,7 +51,7 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
                     PurchasedSoftwareLicenses = SubscriptionExtensions.ToDtoCollection(entity.Subscriptions)
                 });
             }
-            return domainAccounts;
+            return dtoAccounts;
         }
 
         public static Account ToDomain(this AccountDB entity)
@@ -55,8 +70,7 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
             {
                 Id = entity.Id,
                 CustomerId = entity.CustomerId,
-                Name = entity.Name,
-                PurchasedSoftwareLicenses = SubscriptionExtensions.ToDtoCollection(entity.Subscriptions)
+                Name = entity.Name
             };
         }
     }

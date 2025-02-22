@@ -7,5 +7,6 @@ namespace Crayon.Cloud.Sales.Application.Contracts
     {
         Task<Result<IEnumerable<AccountDTO>>> GetAccounts(int customerId);
         Task<Result<AccountDTO>> GetAccountById(int accountId);
+        Task<Result<IEnumerable<AccountWithPurchasedSubscriptionsDTO>>> GetAccountsWithSubscriptions();
     }
 }

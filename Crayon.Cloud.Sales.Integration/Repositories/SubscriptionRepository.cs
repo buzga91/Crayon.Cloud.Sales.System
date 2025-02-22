@@ -1,5 +1,4 @@
-﻿using Crayon.Cloud.Sales.Domain.Models;
-using Crayon.Cloud.Sales.Integration.ContextDB;
+﻿using Crayon.Cloud.Sales.Integration.ContextDB;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Entities;
 using Crayon.Cloud.Sales.Shared;
@@ -21,19 +20,6 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<SubscriptionDB>>> GetSubscriptionsByAccountId(int accountId)
-        {
-            var subscriptions = _context.Subscriptions.Where(x => x.AccountId == accountId)
-                 .ToList();
-            if (subscriptions == null)
-            {
-                string message = $"There is not subrscriptions for specific account Id:{accountId}";
-                Console.WriteLine(message);
-                return Result<IEnumerable<SubscriptionDB>>.Failure(message);
-            }
-            return Result<IEnumerable<SubscriptionDB>>.Success(subscriptions);
-        }
-
         public async Task<Result> ChangeSubscriptionState(int subscriptionId, string state)
         {
             var subscription = _context.Subscriptions.Where(x => x.Id == subscriptionId)
@@ -46,7 +32,7 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             }
             if(subscription.State == state)
             {
-                string message = $"Subscription with id:{subscriptionId} is already in provided state. Subscriptin state:{subscription.State}, new proviced state:{state}";
+                string message = $"Subscription with id:{subscriptionId} is already in provided state. Subscriptin state:{subscription.State}, new provided state:{state}";
                 Console.WriteLine(message);
                 return Result.Failure(message);
             }

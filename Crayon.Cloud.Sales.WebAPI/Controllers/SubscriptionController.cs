@@ -33,20 +33,20 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
         }
 
-        [HttpGet("get-subscriptions-by-{accountId}")]
-        [RoutParameterValidation]
-        public async Task<IActionResult> GetSubscriptionsByAccountId(int accountId)
-        {
-            try
-            {
-                var result = await _SubscriptionService.GetSubscriptionsForSpecificAccount(accountId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet("get-subscriptions-for-each-account")]
+        //[RoutParameterValidation]
+        //public async Task<IActionResult> GetSubscriptionsForEachAccountId()
+        //{
+        //    try
+        //    {
+        //        var result = await _SubscriptionService.GetSubscriptionsForSpecificAccount();
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
 
         [HttpPatch("cancel-subscription-{subscriptionId}")]

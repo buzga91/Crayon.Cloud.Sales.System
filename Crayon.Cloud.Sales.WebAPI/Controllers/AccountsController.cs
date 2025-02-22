@@ -15,6 +15,20 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             _accountService = accountService;
         }
 
+        [HttpGet("get-acoutns-with-purchased-subscriptions")]
+        public async Task<IActionResult> GetAccountsWithPurchasedSubscriptions()
+        {
+            try
+            {
+                var result = await _accountService.GetAccountsWithSubscriptions();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("get-acoutns-by-{customerId}")]
         [RoutParameterValidation]
         public async Task<IActionResult> GetAccountsByCustomerId(int customerId)
@@ -28,7 +42,6 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            
         }
     }
 }

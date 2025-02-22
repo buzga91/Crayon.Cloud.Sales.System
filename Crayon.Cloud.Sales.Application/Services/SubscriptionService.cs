@@ -49,14 +49,14 @@ namespace Crayon.Cloud.Sales.Application.Services
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<SubscriptionDTO>>> GetSubscriptionsForSpecificAccount(int accountId)
-        {
-            var subscriptions = await _subscriptionRepository.GetSubscriptionsByAccountId(accountId);
-            if (!subscriptions.IsSuccess) return Result<IEnumerable<SubscriptionDTO>>.Failure(subscriptions.Error);
+        //public async Task<Result<IEnumerable<SubscriptionDTO>>> GetSubscriptionsForEachAccountId()
+        //{
+        //    var subscriptions = await _subscriptionRepository.GetSubscriptionsByAccountId();
+        //    if (!subscriptions.IsSuccess) return Result<IEnumerable<SubscriptionDTO>>.Failure(subscriptions.Error);
 
-            var domainSubscription = SubscriptionExtensions.ToDtoCollection(subscriptions.Value);
-            return Result<IEnumerable<SubscriptionDTO>>.Success(domainSubscription);
-        }
+        //    var domainSubscription = SubscriptionExtensions.ToDtoCollection(subscriptions.Value);
+        //    return Result<IEnumerable<SubscriptionDTO>>.Success(domainSubscription);
+        //}
 
         public async Task<Result<SubscriptionDTO>> ProvisionSubscription(Subscription subscription)
         {
@@ -69,7 +69,7 @@ namespace Crayon.Cloud.Sales.Application.Services
             var customer = await _customerRepository.GetCustomerById(accountEntity.Value.Id);
             if (!customer.IsSuccess) return Result<SubscriptionDTO>.Failure(customer.Error);
 
-            var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription, customer.Value.CustomerCcpId);
+            var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription);
             var result = await _softwareService.ProvisionSoftware(softwareDTO);
 
             if (!result.IsSuccess) return Result<SubscriptionDTO>.Failure(result.Error);

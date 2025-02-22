@@ -1,5 +1,4 @@
 ﻿using Crayon.Cloud.Sales.Application.Contracts;
-using Crayon.Cloud.Sales.Domain.Models;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Extensions;
 using Crayon.Cloud.Sales.Shared;
@@ -30,6 +29,14 @@ namespace Crayon.Cloud.Sales.Application.Services
             if (!accountEntities.IsSuccess) return Result<IEnumerable<AccountDTO>>.Failure(accountEntities.Error);
             var accounts = AccountExtensions.ToDtoCollection(accountEntities.Value);
             return Result<IEnumerable<AccountDTO>>.Success(accounts);
+        }
+
+        public async Task<Result<IEnumerable<AccountWithPurchasedSubscriptionsDTO>>> GetAccountsWithSubscriptions()
+        {
+            var accountEntities = await _accountRepository.GetAccountsWithSubscriptions();
+            if (!accountEntities.IsSuccess) return Result<IEnumerable<AccountWithPurchasedSubscriptionsDTO>>.Failure(accountEntities.Error);
+            var accounts = AccountExtensions.ToDtoCollectionWithPurchasedSubscriptions(accountEntities.Value);
+            return Result<IEnumerable<AccountWithPurchasedSubscriptionsDTO>>.Success(accounts);
         }
     }
 }

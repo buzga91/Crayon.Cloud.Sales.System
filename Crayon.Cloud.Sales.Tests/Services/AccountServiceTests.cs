@@ -16,6 +16,57 @@ namespace Crayon.Cloud.Sales.Tests.Services
             _accountRepositoryMock = new Mock<IAccountRepository>();
             _accountService = new AccountService(_accountRepositoryMock.Object);
         }
+        [Fact]
+        public async Task GetAccountsWithSubscriptions_ShouldReturnSuccess_WhenRepositoryReturnsData()
+        {
+            // Arrange
+            var mockAccountEntities = new List<AccountDB>
+        {
+            new AccountDB
+            {
+                Id = 1,
+                Name = "Account 1",
+                CustomerId = 1,
+                Subscriptions = new List<SubscriptionDB>
+                {
+                    new SubscriptionDB { Id = 1, SoftwareName = "Software A", AccountId = 1, State = "Active",MaxQuantity = 1000, MinQuantity =1 ,Quantity =1, SoftwareId = 1, ValidTo = DateTime.Now.AddYears(1),Account = new AccountDB()    }
+                }
+            }
+        };
+
+            _accountRepositoryMock
+                .Setup(repo => repo.GetAccountsWithSubscriptions())
+                .ReturnsAsync(Result<IEnumerable<AccountDB>>.Success(mockAccountEntities));
+
+            // Act
+            var result = await _accountService.GetAccountsWithSubscriptions();
+
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.NotNull(result.Value);
+            Assert.Single(result.Value);
+            Assert.Equal("Account 1", result.Value.First().Name);
+            _accountRepositoryMock.Verify(repo => repo.GetAccountsWithSubscriptions(), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetAccountsWithSubscriptions_ShouldReturnFailure_WhenRepositoryFails()
+        {
+            // Arrange
+            const string errorMessage = "Repository failed.";
+            _accountRepositoryMock
+                .Setup(repo => repo.GetAccountsWithSubscriptions())
+                .ReturnsAsync(Result<IEnumerable<AccountDB>>.Failure(errorMessage));
+
+            // Act
+            var result = await _accountService.GetAccountsWithSubscriptions();
+
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal(errorMessage, result.Error);
+            Assert.Null(result.Value);
+            _accountRepositoryMock.Verify(repo => repo.GetAccountsWithSubscriptions(), Times.Once);
+        }
 
         [Fact]
         public async Task GetAccountById_ReturnsAccount_WhenSuccess()

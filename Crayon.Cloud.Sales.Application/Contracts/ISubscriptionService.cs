@@ -8,7 +8,7 @@ namespace Crayon.Cloud.Sales.Application.Contracts
     {
         Task<Result<IEnumerable<AvailableSoftwareDTO>>> GetAvailableSoftwaresFromCCP();
         Task<Result<SubscriptionDTO>> ProvisionSubscription(Subscription license);
-        Task<Result<IEnumerable<SubscriptionDTO>>> GetSubscriptionsForSpecificAccount(int accountId);
+        //Task<Result<IEnumerable<SubscriptionDTO>>> GetSubscriptionsForEachAccountId();
         Task<Result> CancelSubscription(int licenseId);
         Task<Result> ExtendSubscriptionValidDate(int licenseId, DateTime newValidTo);
         Task<Result> ChangeSubscriptionQuantity(int licenseId, int newQuantity);

@@ -9,6 +9,10 @@ namespace Crayon.Cloud.Sales.Shared.DTO
         [ValidateIntValue]
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Account Id is required")]
+        [ValidateIntValue]
+        public int AccountId { get; set; }
+
         [Required(ErrorMessage = "CustomerCcp Id is required")]
         [ValidateIntValue]
         public int CustomerCcpId { get; set; }
