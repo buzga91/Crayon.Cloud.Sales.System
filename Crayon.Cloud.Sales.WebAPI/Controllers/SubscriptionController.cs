@@ -1,4 +1,5 @@
 ﻿using Crayon.Cloud.Sales.Application.Contracts;
+using Crayon.Cloud.Sales.Domain.Attributes;
 using Crayon.Cloud.Sales.Domain.Extensions;
 using Crayon.Cloud.Sales.Integration.SwaggerRequestExamples;
 using Crayon.Cloud.Sales.Shared.DTO;
@@ -32,7 +33,8 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
         }
 
-        [HttpGet("get-subscription-by-{accountId}")]
+        [HttpGet("get-subscriptions-by-{accountId}")]
+        [RoutParameterValidation]
         public async Task<IActionResult> GetSubscriptionsByAccountId(int accountId)
         {
             try
@@ -48,6 +50,7 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
 
         [HttpPatch("cancel-subscription-{subscriptionId}")]
+        [RoutParameterValidation]
         public async Task<IActionResult> CancelSubscription(int subscriptionId)
         {
             try
@@ -78,7 +81,7 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
         }
 
-        [HttpPatch("change-quantity")]
+        [HttpPatch("change-license-quantity")]
         [SwaggerRequestExample(typeof(ChangeSubscriptionQuantityDTO), typeof(ChangeSubscriptionQuantityDTOExample))]
         public async Task<IActionResult> ChangeSubscriptionQuantity([FromBody] ChangeSubscriptionQuantityDTO changeSubscriptionQuantityDTO)
         {

@@ -16,6 +16,7 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
         }
 
         [HttpGet("get-acoutns-by-{customerId}")]
+        [RoutParameterValidation]
         public async Task<IActionResult> GetAccountsByCustomerId(int customerId)
         {
             try

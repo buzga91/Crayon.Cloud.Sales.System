@@ -78,7 +78,12 @@ namespace Crayon.Cloud.Sales.Integration.Clients
         public async Task<Result<AvailableSoftwareDTO>> GetAvailableSoftwareServicesById(int softwareId)
         {
             var availableSoftwareService = availableSoftwares.FirstOrDefault(x => x.Id == softwareId);
-            if (availableSoftwareService is null) return Result<AvailableSoftwareDTO>.Failure("Software doesn't exist, please try with availabe software Id");
+            if (availableSoftwareService is null)
+            {
+                string message = "Software doesn't exist, or it is not available, please try with available software Id";
+                Console.WriteLine(message);
+                return Result<AvailableSoftwareDTO>.Failure(message);
+            }
             return Result<AvailableSoftwareDTO>.Success(availableSoftwareService);
         }
         public async Task<Result<IEnumerable<AvailableSoftwareDTO>>> GetAvailableSoftwareServices()
@@ -88,11 +93,20 @@ namespace Crayon.Cloud.Sales.Integration.Clients
 
         public async Task<Result<PurchasedSoftwareDTO>> ProvisionSoftware(ProvisionSoftwareDTO provisionSoftwareDTO)
         {
-            var availableSoftware = availableSoftwares.FirstOrDefault(x => x.Id == provisionSoftwareDTO.Id);
-            if (availableSoftware is null) Result<PurchasedSoftwareDTO>.Failure("Provisioning failure. Please try to provision one of the available softwares.");
-            if (provisionSoftwareDTO.Quantity > availableSoftware.MaxQuantity
-                || provisionSoftwareDTO.Quantity < availableSoftware.MinQuantity) Result<PurchasedSoftwareDTO>.Failure("Provisioning failure. License quantity can't be more then maximum license value, or less then minimum license quantity value. Check the values from available softwares!");
-            var purchasedSoftwareDto = SoftwareExtensions.ToCcpPurchasedDto(provisionSoftwareDTO, availableSoftware.Name);
+            var availableSoftware = await GetAvailableSoftwareServicesById(provisionSoftwareDTO.Id);
+            if (!availableSoftware.IsSuccess)
+            {
+                Console.WriteLine(availableSoftware.Error);
+                return Result<PurchasedSoftwareDTO>.Failure(availableSoftware.Error);
+            }
+            else if (provisionSoftwareDTO.Quantity > availableSoftware.Value.MaxQuantity
+                || provisionSoftwareDTO.Quantity < availableSoftware.Value.MinQuantity)
+            {
+                string message = "Provisioning failure. License quantity can't be more then maximum license value, or less then minimum license quantity value. Check the values from available softwares!";
+                Console.WriteLine(message);
+                return Result<PurchasedSoftwareDTO>.Failure(message);
+            }
+            var purchasedSoftwareDto = SoftwareExtensions.ToCcpPurchasedDto(provisionSoftwareDTO, availableSoftware.Value.Name);
             return Result<PurchasedSoftwareDTO>.Success(purchasedSoftwareDto);
         }
     }

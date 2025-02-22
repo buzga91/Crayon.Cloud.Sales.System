@@ -1,6 +1,4 @@
-﻿using Crayon.Cloud.Sales.Domain.Models;
-
-namespace Crayon.Cloud.Sales.Integration.Entities
+﻿namespace Crayon.Cloud.Sales.Integration.Entities
 {
     public class CustomerDB
     {

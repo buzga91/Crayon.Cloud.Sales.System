@@ -1,5 +1,4 @@
 ﻿using Crayon.Cloud.Sales.Application.Contracts;
-using Crayon.Cloud.Sales.Domain.Exceptions;
 using Crayon.Cloud.Sales.Domain.Models;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Extensions;
@@ -19,7 +18,7 @@ namespace Crayon.Cloud.Sales.Application.Services
         public async Task<Result<Account>> GetAccountById(int accountId)
         {
             var accountEntitie = await _accountRepository.GetAccountById(accountId);
-            if (!accountEntitie.IsSuccess) throw new AccountException(accountEntitie.Error);
+            if (!accountEntitie.IsSuccess) return Result<Account>.Failure(accountEntitie.Error);
             var account = AccountExtensions.ToDomain(accountEntitie.Value);
             return Result<Account>.Success(account);
         }
@@ -27,7 +26,7 @@ namespace Crayon.Cloud.Sales.Application.Services
         public async Task<Result<IEnumerable<Account>>> GetAccounts(int customerId)
         {
             var accountEntities = await _accountRepository.GetAccounts(customerId);
-            if (!accountEntities.IsSuccess) throw new AccountException(accountEntities.Error);
+            if (!accountEntities.IsSuccess) return Result<IEnumerable<Account>>.Failure(accountEntities.Error);
             var accounts = AccountExtensions.ToDomainCollection(accountEntities.Value);
             return Result<IEnumerable<Account>>.Success(accounts);
         }

@@ -69,6 +69,7 @@ namespace Crayon.Cloud.Sales.Domain.Extensions
 
                 domainLicenses.Add(new Models.Subscription
                 {
+                    
                     AccountId = entity.AccountId,
                     Id = entity.Id,
                     Quantity = entity.Quantity,

@@ -15,26 +15,13 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
         }
         public async Task<Result<CustomerDB>> GetCustomerById(int customerId)
         {
-            var customer = new CustomerDB();
-            using (_context)
-            {
-                customer = (from cu in _context.Customers
-                         join ac in _context.Accounts on cu.Id equals ac.CustomerId
-                         where cu.Id == customerId
-                         select new CustomerDB
-                         {
-                             Accounts = cu.Accounts,
-                             CustomerCcpId = cu.CustomerCcpId,
-                             Id = cu.Id,
-                             Name = cu.Name
-                         }).FirstOrDefault();
+            var customer = _context.Customers.FirstOrDefault(x => x.Id == customerId);
 
-                if (customer is null)
-                {
-                    string message = $"There is no customer for specifi id:{customerId}";
-                    Console.WriteLine(message);
-                    return Result<CustomerDB>.Failure(message);
-                }
+            if (customer == null)
+            {
+                string message = $"There is no customer for specifi id:{customerId}";
+                Console.WriteLine(message);
+                return Result<CustomerDB>.Failure(message);
             }
             return Result<CustomerDB>.Success(customer);
         }

@@ -2,6 +2,7 @@
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Shared;
 using Crayon.Cloud.Sales.Shared.DTO;
+using System.Collections.Generic;
 
 namespace Crayon.Cloud.Sales.Application.Services
 {
@@ -16,17 +17,23 @@ namespace Crayon.Cloud.Sales.Application.Services
 
         public async Task<Result<IEnumerable<AvailableSoftwareDTO>>> GetAvailableSoftwareServices()
         {
-            return await ccpClient.GetAvailableSoftwareServices();
+            var result = await ccpClient.GetAvailableSoftwareServices();
+            if (!result.IsSuccess) return Result<IEnumerable<AvailableSoftwareDTO>>.Failure(result.Error);
+            return result;
         }
 
         public async Task<Result<AvailableSoftwareDTO>> GetAvailableSoftwareServicesById(int softwareId)
         {
-            return await ccpClient.GetAvailableSoftwareServicesById(softwareId);
+            var result = await ccpClient.GetAvailableSoftwareServicesById(softwareId);
+            if (!result.IsSuccess) return Result<AvailableSoftwareDTO>.Failure(result.Error);
+            return result;
         }
 
         public async Task<Result<PurchasedSoftwareDTO>> ProvisionSoftware(ProvisionSoftwareDTO provisionSoftwareDTO)
         {
-            return await ccpClient.ProvisionSoftware(provisionSoftwareDTO);
+            var result = await ccpClient.ProvisionSoftware(provisionSoftwareDTO);
+            if (!result.IsSuccess) return Result<PurchasedSoftwareDTO>.Failure(result.Error);
+            return result;
         }
     }
 }
