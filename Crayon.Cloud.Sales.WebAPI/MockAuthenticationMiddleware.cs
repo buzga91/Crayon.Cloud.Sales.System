@@ -15,7 +15,6 @@ namespace Crayon.Cloud.Sales.WebAPI
         {
             if (context.User?.Identity == null || !context.User.Identity.IsAuthenticated)
             {
-                // Create a ClaimsPrincipal with a mocked CustomerId claim
                 var claims = new[]
                 {
                 new Claim(ClaimTypes.NameIdentifier, "mock-user"),

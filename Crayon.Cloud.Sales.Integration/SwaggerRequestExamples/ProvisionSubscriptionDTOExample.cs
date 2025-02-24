@@ -9,7 +9,6 @@ namespace Crayon.Cloud.Sales.Integration.SwaggerRequestExamples
         {
             return new ProvisionSubscriptionDTO
             {
-                CustomerId = 2,
                 AccountId = 3,
                 Quantity = 1,
                 SoftwareId = 5,

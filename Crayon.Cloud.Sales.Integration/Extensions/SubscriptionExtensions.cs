@@ -33,7 +33,6 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
 
             return new Subscription
             {
-                CustomerId = dto.CustomerId,
                 AccountId = dto.AccountId,
                 SoftwareId = dto.SoftwareId,
                 Quantity = dto.Quantity,

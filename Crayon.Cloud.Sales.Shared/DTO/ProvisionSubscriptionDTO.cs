@@ -16,10 +16,6 @@ namespace Crayon.Cloud.Sales.Shared.DTO
         [ValidateIntValue]
         public int AccountId { get; set; }
 
-        [Required(ErrorMessage = "Customer id is required")]
-        [ValidateIntValue]
-        public int CustomerId { get; set; }
-
         [Required(ErrorMessage = "Quantity is required")]
         [ValidateIntValue]
         public int Quantity { get; set; }
@@ -30,7 +26,6 @@ namespace Crayon.Cloud.Sales.Shared.DTO
         public DateTime ValidTo { get; set; }
 
         [Required(ErrorMessage = "State is required")]
-        [ValidateStateValue]
         public string State { get; set; }
     }
 }

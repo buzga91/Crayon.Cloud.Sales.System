@@ -56,14 +56,15 @@ namespace Crayon.Cloud.Sales.Application.Services
             var accountEntity = await _accountRepository.GetAccountById(subscription.AccountId);
             if (!accountEntity.IsSuccess) return Result<SubscriptionDTO>.Failure(accountEntity.Error);
 
-            var customer = await _customerRepository.GetCustomerById(accountEntity.Value.Id);
+            var customer = await _customerRepository.GetCustomerById(accountEntity.Value.CustomerId);
             if (!customer.IsSuccess) return Result<SubscriptionDTO>.Failure(customer.Error);
-
+            
             var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription, accountEntity.Value.AccountCcpId, customer.Value.CustomerCcpId);
             var result = await _softwareService.ProvisionSoftware(softwareDTO);
 
             if (!result.IsSuccess) return Result<SubscriptionDTO>.Failure(result.Error);
 
+            subscription.CustomerId = customer.Value.Id;
             subscription.MaxQuantity = availableSubscription.Value.MaxQuantity;
             subscription.MinQuantity = availableSubscription.Value.MinQuantity;
 

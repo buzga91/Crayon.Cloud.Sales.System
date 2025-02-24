@@ -20,6 +20,7 @@ namespace Crayon.Cloud.Sales.Shared.DTO
 
         [Required(ErrorMessage = "Quantity is required")]
         [ValidateIntValue]
+
         public int Quantity { get; set; }
         [Required(ErrorMessage = "State is required")]
         public string State { get; set; }

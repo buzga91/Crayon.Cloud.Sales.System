@@ -1,4 +1,7 @@
 # Cloud Sales Solution Services
+*******************************************************************************
+*I mocked authentication part and stored customerId as a mock value in claims.*
+*******************************************************************************
 
 ## Overview
 
