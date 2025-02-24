@@ -26,7 +26,7 @@ namespace Crayon.Cloud.Sales.Shared.DTO
         public DateTime ValidTo { get; set; }
 
         [Required(ErrorMessage = "State is required")]
-        [ValidateStateValueAttribute]
+        [ValidateStateValue]
         public string State { get; set; }
     }
 }

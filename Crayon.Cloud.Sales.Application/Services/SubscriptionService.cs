@@ -49,15 +49,6 @@ namespace Crayon.Cloud.Sales.Application.Services
             return Result.Success();
         }
 
-        //public async Task<Result<IEnumerable<SubscriptionDTO>>> GetSubscriptionsForEachAccountId()
-        //{
-        //    var subscriptions = await _subscriptionRepository.GetSubscriptionsByAccountId();
-        //    if (!subscriptions.IsSuccess) return Result<IEnumerable<SubscriptionDTO>>.Failure(subscriptions.Error);
-
-        //    var domainSubscription = SubscriptionExtensions.ToDtoCollection(subscriptions.Value);
-        //    return Result<IEnumerable<SubscriptionDTO>>.Success(domainSubscription);
-        //}
-
         public async Task<Result<SubscriptionDTO>> ProvisionSubscription(Subscription subscription)
         {
             var availableSubscription = await _softwareService.GetAvailableSoftwareServicesById(subscription.SoftwareId);

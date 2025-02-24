@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Crayon.Cloud.Sales.Application\Crayon.Cloud.Sales.Application.csproj" />
     <ProjectReference Include="..\Crayon.Cloud.Sales.Integration\Crayon.Cloud.Sales.Integration.csproj" />
+    <ProjectReference Include="..\Crayon.Cloud.Sales.WebAPI\Crayon.Cloud.Sales.WebAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
