@@ -29,7 +29,7 @@ namespace Crayon.Cloud.Sales.Tests.Services
                 CustomerId = 1,
                 Subscriptions = new List<SubscriptionDB>
                 {
-                    new SubscriptionDB { Id = 1, SoftwareName = "Software A", AccountId = 1, State = "Active",MaxQuantity = 1000, MinQuantity =1 ,Quantity =1, SoftwareId = 1, ValidTo = DateTime.Now.AddYears(1),Account = new AccountDB()    }
+                    new SubscriptionDB { Id = 1, CustomerId = 1, Customer = new CustomerDB(),  SoftwareName = "Software A", AccountId = 1, State = "Active",MaxQuantity = 1000, MinQuantity =1 ,Quantity =1, SoftwareId = 1, ValidTo = DateTime.Now.AddYears(1),Account = new AccountDB()    }
                 }
             }
         };

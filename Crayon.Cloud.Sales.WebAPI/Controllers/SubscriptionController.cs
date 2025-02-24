@@ -1,10 +1,12 @@
 ﻿using Crayon.Cloud.Sales.Application.Contracts;
 using Crayon.Cloud.Sales.Domain.Attributes;
-using Crayon.Cloud.Sales.Domain.Extensions;
+using Crayon.Cloud.Sales.Integration.Extensions;
 using Crayon.Cloud.Sales.Integration.SwaggerRequestExamples;
 using Crayon.Cloud.Sales.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+
+using logger = Crayon.Cloud.Sales.Shared.Logger;
 namespace Crayon.Cloud.Sales.WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -18,12 +20,14 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             _SubscriptionService = SubscriptionService;
         }
 
-        [HttpGet("get-available-softwares")]
+        [HttpGet("softwares")]
         public async Task<IActionResult> GetAvailableSoftwares()
         {
             try
             {
+                logger.LogInfo("Getting available softwares from CCP");
                 var result = await _SubscriptionService.GetAvailableSoftwaresFromCCP();
+                logger.LogInfo("Proccess succeed");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -33,13 +37,15 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
         }
 
-        [HttpPatch("cancel-subscription-{subscriptionId}")]
+        [HttpPatch("cancel/{subscriptionId}")]
         [RoutParameterValidation]
         public async Task<IActionResult> CancelSubscription(int subscriptionId)
         {
             try
             {
+                logger.LogInfo($"Canceling subscription with the id:{subscriptionId}.");
                 var result = await _SubscriptionService.CancelSubscription(subscriptionId);
+                logger.LogInfo("Proccess succeed");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -49,13 +55,15 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
         }
 
 
-        [HttpPatch("extend-valid-date")]
+        [HttpPatch("extend")]
         [SwaggerRequestExample(typeof(ExtendSubscriptionValidDateDTO), typeof(ExtendSubscriptionValidDateDTOExample))]
         public async Task<IActionResult> ExtendSubscriptionValidDate([FromBody] ExtendSubscriptionValidDateDTO extendSubscriptionValidDate)
         {
             try
             {
+                logger.LogInfo($"Extending subscription (id:{extendSubscriptionValidDate.SubscriptionId}) valid date to");
                 var result = await _SubscriptionService.ExtendSubscriptionValidDate(extendSubscriptionValidDate.SubscriptionId, extendSubscriptionValidDate.NewValidTo);
+                logger.LogInfo("Proccess succeed");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -65,13 +73,15 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
         }
 
-        [HttpPatch("change-license-quantity")]
+        [HttpPatch("changeLicense")]
         [SwaggerRequestExample(typeof(ChangeSubscriptionQuantityDTO), typeof(ChangeSubscriptionQuantityDTOExample))]
         public async Task<IActionResult> ChangeSubscriptionQuantity([FromBody] ChangeSubscriptionQuantityDTO changeSubscriptionQuantityDTO)
         {
             try
             {
+                logger.LogInfo($"Changing subscription (id:{changeSubscriptionQuantityDTO.SubscriptionId})  license quantity");
                 var result = await _SubscriptionService.ChangeSubscriptionQuantity(changeSubscriptionQuantityDTO.SubscriptionId, changeSubscriptionQuantityDTO.NewQuantity);
+                logger.LogInfo("Proccess succeed");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -80,14 +90,16 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             }
         }
 
-        [HttpPost("provision-subscription")]
+        [HttpPost("provision")]
         [SwaggerRequestExample(typeof(ProvisionSubscriptionDTO), typeof(ProvisionSubscriptionDTOExample))]
         public async Task<IActionResult> ProvisionSubscription([FromBody] ProvisionSubscriptionDTO provisionSubscription)
         {
             try
             {
+                logger.LogInfo($"Provisioning new subscription");
                 var domainLicense = SubscriptionExtensions.ToDomain(provisionSubscription);
                 var result = await _SubscriptionService.ProvisionSubscription(domainLicense);
+                logger.LogInfo("Proccess succeed");
                 return Ok(result);
             }
             catch (Exception ex)

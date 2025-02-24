@@ -27,13 +27,13 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             if (subscription == null)
             {
                 string message = $"Subscription with id:{subscriptionId}  doesn't exist";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result.Failure(message);
             }
             if(subscription.State == state)
             {
                 string message = $"Subscription with id:{subscriptionId} is already in provided state. Subscriptin state:{subscription.State}, new provided state:{state}";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result.Failure(message);
             }
             subscription.State = state;
@@ -47,13 +47,19 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             if (subscription == null)
             {
                 string message = $"Subscription with id:{subscriptionId}  doesn't exist";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result.Failure(message);
             }
-            else if(subscription.ValidTo >= validTo)
+            else if (subscription.State == "Canceled")
+            {
+                string message = $"You can't extend validation time on canceled subscription.";
+                Logger.LogError(message);
+                return Result.Failure(message);
+            }
+            else if (subscription.ValidTo >= validTo)
             {
                 string message = $"New valid to date {validTo} must be greater then current valid date time {subscription.ValidTo}";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result.Failure(message);
             }
                 subscription.ValidTo = validTo;
@@ -69,6 +75,12 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             {
                 string message = $"Subscription with id:{subscriptionId} doesn't exist";
                 Console.WriteLine(message);
+                return Result.Failure(message);
+            }
+            else if (subscription.State == "Canceled")
+            {
+                string message = $"You can't change license quantity on canceled subscription.";
+                Logger.LogError(message);
                 return Result.Failure(message);
             }
             else if (newQuantity > subscription.MaxQuantity || newQuantity < subscription.MinQuantity)

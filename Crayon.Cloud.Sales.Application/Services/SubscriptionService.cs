@@ -1,5 +1,4 @@
 ﻿using Crayon.Cloud.Sales.Application.Contracts;
-using Crayon.Cloud.Sales.Domain.Extensions;
 using Crayon.Cloud.Sales.Domain.Models;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Extensions;
@@ -60,7 +59,7 @@ namespace Crayon.Cloud.Sales.Application.Services
             var customer = await _customerRepository.GetCustomerById(accountEntity.Value.Id);
             if (!customer.IsSuccess) return Result<SubscriptionDTO>.Failure(customer.Error);
 
-            var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription);
+            var softwareDTO = SoftwareExtensions.ToCcpProvisionDto(subscription, accountEntity.Value.AccountCcpId, customer.Value.CustomerCcpId);
             var result = await _softwareService.ProvisionSoftware(softwareDTO);
 
             if (!result.IsSuccess) return Result<SubscriptionDTO>.Failure(result.Error);

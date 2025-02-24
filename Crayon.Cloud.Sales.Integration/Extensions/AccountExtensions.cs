@@ -1,5 +1,4 @@
-﻿using Crayon.Cloud.Sales.Domain.Extensions;
-using Crayon.Cloud.Sales.Domain.Models;
+﻿using Crayon.Cloud.Sales.Domain.Models;
 using Crayon.Cloud.Sales.Integration.Entities;
 using Crayon.Cloud.Sales.Shared.DTO;
 
@@ -15,6 +14,7 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
                 domainAccounts.Add(new Account
                 {
                     Id = entity.Id,
+                    AccountCcpId = entity.AccountCcpId,
                     CustomerId = entity.CustomerId,
                     Name = entity.Name,
                     PurchasedSoftwareLicenses = SubscriptionExtensions.ToDomainCollection(entity.Subscriptions)
@@ -32,7 +32,8 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
                 {
                     Id = entity.Id,
                     CustomerId = entity.CustomerId,
-                    Name = entity.Name
+                    Name = entity.Name,
+                    AccountCspId = entity.AccountCcpId
                 });
             }
             return dtoAccounts;
@@ -46,6 +47,7 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
                 dtoAccounts.Add(new AccountWithPurchasedSubscriptionsDTO
                 {
                     Id = entity.Id,
+                    AccountCCpId = entity.AccountCcpId,
                     CustomerId = entity.CustomerId,
                     Name = entity.Name,
                     PurchasedSoftwareLicenses = SubscriptionExtensions.ToDtoCollection(entity.Subscriptions)
@@ -61,6 +63,7 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
                 Id = entity.Id,
                 CustomerId = entity.CustomerId,
                 Name = entity.Name,
+                AccountCcpId = entity.AccountCcpId,
                 PurchasedSoftwareLicenses = SubscriptionExtensions.ToDomainCollection(entity.Subscriptions)
             };
         }
@@ -69,6 +72,7 @@ namespace Crayon.Cloud.Sales.Integration.Extensions
             return new AccountDTO
             {
                 Id = entity.Id,
+                AccountCspId = entity.AccountCcpId,
                 CustomerId = entity.CustomerId,
                 Name = entity.Name
             };

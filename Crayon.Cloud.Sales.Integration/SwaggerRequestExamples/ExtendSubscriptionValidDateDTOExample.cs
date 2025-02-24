@@ -9,7 +9,7 @@ namespace Crayon.Cloud.Sales.Integration.SwaggerRequestExamples
         {
             return new ExtendSubscriptionValidDateDTO
             {
-                SubscriptionId = 3,
+                SubscriptionId = 1,
                 NewValidTo = DateTime.Now.AddYears(1).AddMonths(1)
             };
         }

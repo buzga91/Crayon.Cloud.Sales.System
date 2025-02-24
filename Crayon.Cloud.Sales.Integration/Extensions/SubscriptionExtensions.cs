@@ -2,17 +2,17 @@
 using Crayon.Cloud.Sales.Integration.Entities;
 using Crayon.Cloud.Sales.Shared.DTO;
 
-namespace Crayon.Cloud.Sales.Domain.Extensions
+namespace Crayon.Cloud.Sales.Integration.Extensions
 {
     public static class SubscriptionExtensions
     {
 
-        public static Models.Subscription ToDomain(this SubscriptionDB entity)
+        public static Subscription ToDomain(this SubscriptionDB entity)
         {
             var result = Enum.TryParse<licenseState>(entity.State, out licenseState state);
             if (!result) throw new ArithmeticException($"{nameof(entity.State)} is invalid value");
 
-            return new Models.Subscription
+            return new Subscription
             {
                 AccountId = entity.AccountId,
                 Id = entity.Id,
@@ -26,13 +26,14 @@ namespace Crayon.Cloud.Sales.Domain.Extensions
             };
         }
 
-        public static Models.Subscription ToDomain(this ProvisionSubscriptionDTO dto)
+        public static Subscription ToDomain(this ProvisionSubscriptionDTO dto)
         {
             var result = Enum.TryParse<licenseState>(dto.State, out licenseState state);
             if (!result) throw new ArithmeticException($"{nameof(dto.State)} is invalid value. State can be: Active, Canceled ");
 
-            return new Models.Subscription
+            return new Subscription
             {
+                CustomerId = dto.CustomerId,
                 AccountId = dto.AccountId,
                 SoftwareId = dto.SoftwareId,
                 Quantity = dto.Quantity,
@@ -42,13 +43,14 @@ namespace Crayon.Cloud.Sales.Domain.Extensions
             };
         }
 
-        public static SubscriptionDB ToEntity(this Models.Subscription fromDomain, AccountDB accountEntity)
+        public static SubscriptionDB ToEntity(this Subscription fromDomain, AccountDB accountEntity)
         {
 
             return new SubscriptionDB
             {
-                AccountId = fromDomain.AccountId,
                 Id = fromDomain.Id,
+                AccountId = fromDomain.AccountId,
+              CustomerId = fromDomain.CustomerId,
                 Quantity = fromDomain.Quantity,
                 SoftwareName = fromDomain.SoftwareName,
                 SoftwareId = fromDomain.SoftwareId,
@@ -59,19 +61,19 @@ namespace Crayon.Cloud.Sales.Domain.Extensions
                 MinQuantity = fromDomain.MinQuantity
             };
         }
-        public static IEnumerable<Models.Subscription> ToDomainCollection(this IEnumerable<SubscriptionDB> entities)
+        public static IEnumerable<Subscription> ToDomainCollection(this IEnumerable<SubscriptionDB> entities)
         {
-            var domainLicenses = new List<Models.Subscription>();
+            var domainLicenses = new List<Subscription>();
             foreach (var entity in entities)
             {
                 var result = Enum.TryParse<licenseState>(entity.State, out licenseState state);
                 if (!result) throw new ArithmeticException($"{nameof(entity.State)} is invalid value");
 
-                domainLicenses.Add(new Models.Subscription
+                domainLicenses.Add(new Subscription
                 {
-                    
-                    AccountId = entity.AccountId,
                     Id = entity.Id,
+                    AccountId = entity.AccountId,
+                    CustomerId = entity.CustomerId,
                     Quantity = entity.Quantity,
                     MinQuantity = entity.MinQuantity,
                     MaxQuantity = entity.MaxQuantity,
@@ -94,9 +96,9 @@ namespace Crayon.Cloud.Sales.Domain.Extensions
 
                 domainLicenses.Add(new SubscriptionDTO
                 {
-
-                    AccountId = entity.AccountId,
                     Id = entity.Id,
+                    AccountId = entity.AccountId,
+                    CustomerId = entity.CustomerId,
                     Quantity = entity.Quantity,
                     MinQuantity = entity.MinQuantity,
                     MaxQuantity = entity.MaxQuantity,
@@ -116,8 +118,9 @@ namespace Crayon.Cloud.Sales.Domain.Extensions
 
             return new SubscriptionDTO
             {
-                AccountId = entity.AccountId,
                 Id = entity.Id,
+                AccountId = entity.AccountId,
+                CustomerId = entity.CustomerId,
                 Quantity = entity.Quantity,
                 MinQuantity = entity.MinQuantity,
                 MaxQuantity = entity.MaxQuantity,

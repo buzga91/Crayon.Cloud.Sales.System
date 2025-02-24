@@ -11,7 +11,6 @@
     {
         public int CustomerId { get; set; }
         public int CustomerCcpId { get; set; }
-        public int? PartnerId { get; set; }
         public CustomerType CustomerType { get; set; }
         public string Name { get; set; }
         public IEnumerable<Account> Accounts { get; set; }

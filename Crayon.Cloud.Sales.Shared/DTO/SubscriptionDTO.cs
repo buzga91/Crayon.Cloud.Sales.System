@@ -3,6 +3,7 @@
     public class SubscriptionDTO
     {
         public int Id { get; set; }
+        public int CustomerId { get; set; }
         public int SoftwareId { get; set; }
         public string SoftwareName { get; set; }
         public int AccountId { get; set; }

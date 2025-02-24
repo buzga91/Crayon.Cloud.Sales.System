@@ -74,6 +74,8 @@ namespace Crayon.Cloud.Sales.Integration.Clients
                     Description = "Microsoft E5 Software"
                 },
             };
+        private List<int> AccountCcpIds = new List<int> { 1, 2, 3 };
+        private List<int> CustomerCcps = new List<int> { 1, 2, 3 };
 
         public async Task<Result<AvailableSoftwareDTO>> GetAvailableSoftwareServicesById(int softwareId)
         {
@@ -81,7 +83,7 @@ namespace Crayon.Cloud.Sales.Integration.Clients
             if (availableSoftwareService is null)
             {
                 string message = "Software doesn't exist, or it is not available, please try with available software Id";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result<AvailableSoftwareDTO>.Failure(message);
             }
             return Result<AvailableSoftwareDTO>.Success(availableSoftwareService);
@@ -96,18 +98,40 @@ namespace Crayon.Cloud.Sales.Integration.Clients
             var availableSoftware = await GetAvailableSoftwareServicesById(provisionSoftwareDTO.Id);
             if (!availableSoftware.IsSuccess)
             {
-                Console.WriteLine(availableSoftware.Error);
+                Logger.LogError(availableSoftware.Error);
                 return Result<PurchasedSoftwareDTO>.Failure(availableSoftware.Error);
+            }
+            else if(!GetCustomer(provisionSoftwareDTO.CustomerCcpId))
+            {
+                var message = "Provided customer doesn't exist.";
+                Logger.LogError(message);
+                return Result<PurchasedSoftwareDTO>.Failure(message);
+            }
+            else if(!GetAccount(provisionSoftwareDTO.AccountCcpId))
+            {
+                var message = "Provided account doesn't exist.";
+                Logger.LogError(message);
+                return Result<PurchasedSoftwareDTO>.Failure(message);
             }
             else if (provisionSoftwareDTO.Quantity > availableSoftware.Value.MaxQuantity
                 || provisionSoftwareDTO.Quantity < availableSoftware.Value.MinQuantity)
             {
                 string message = "Provisioning failure. License quantity can't be more then maximum license value, or less then minimum license quantity value. Check the values from available softwares!";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result<PurchasedSoftwareDTO>.Failure(message);
             }
             var purchasedSoftwareDto = SoftwareExtensions.ToCcpPurchasedDto(provisionSoftwareDTO, availableSoftware.Value.Name);
             return Result<PurchasedSoftwareDTO>.Success(purchasedSoftwareDto);
+        }
+
+        private bool GetCustomer (int customerCcpId)
+        {
+            return CustomerCcps.Contains(customerCcpId);
+        }
+
+        private bool GetAccount(int accountCcpId)
+        {
+            return AccountCcpIds.Contains(accountCcpId);
         }
     }
 }

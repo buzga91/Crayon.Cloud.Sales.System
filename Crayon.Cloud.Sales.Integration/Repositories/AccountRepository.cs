@@ -2,7 +2,7 @@
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Entities;
 using Crayon.Cloud.Sales.Shared;
-using Crayon.Cloud.Sales.Shared.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crayon.Cloud.Sales.Integration.Repositories
 {
@@ -22,7 +22,7 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             if (account == null)
             {
                 string message = $"There is no account for specifi id:{accountId}";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result<AccountDB>.Failure(message);
             }
             return Result<AccountDB>.Success(account);
@@ -35,7 +35,7 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             if (accounts == null)
             {
                 string message = $"There is no account for specifi id:{customerId}";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result<IEnumerable<AccountDB>>.Failure(message);
             }
             return Result<IEnumerable<AccountDB>>.Success(accounts);
@@ -43,34 +43,16 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
 
         public async Task<Result<IEnumerable<AccountDB>>> GetAccountsWithSubscriptions()
         {
-            var accounts = (from ac in _context.Accounts
-                            join c in _context.Customers on ac.CustomerId equals c.Id
-                            where _context.Subscriptions.Any(s => s.AccountId == ac.Id)
-                            select new AccountDB
-                            {
-                                Id = ac.Id,
-                                Name = ac.Name,
-                                CustomerId = ac.CustomerId,
-                                Subscriptions = (from s in _context.Subscriptions
-                                                 where s.AccountId == ac.Id
-                                                 select new SubscriptionDB
-                                                 {
-                                                     Id = s.Id,
-                                                     SoftwareName = s.SoftwareName,
-                                                     Quantity = s.Quantity,
-                                                     ValidTo = s.ValidTo,
-                                                     State = s.State,
-                                                     Account = s.Account,
-                                                     AccountId = s.AccountId,
-                                                     MaxQuantity = s.MaxQuantity,
-                                                     MinQuantity = s.MinQuantity,
-                                                     SoftwareId = s.SoftwareId,
-                                                 }).ToList()
-                            }).ToList();
+            var accounts = await _context.Accounts
+      .Include(a => a.Customer)
+      .Include(a => a.Subscriptions)
+      .Where(a => a.Subscriptions.Any())
+      .ToListAsync();
+
             if (accounts == null)
             {
                 string message = $"There is no accounts with purchased";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result<IEnumerable<AccountDB>>.Failure(message);
             }
             return Result<IEnumerable<AccountDB>>.Success(accounts);

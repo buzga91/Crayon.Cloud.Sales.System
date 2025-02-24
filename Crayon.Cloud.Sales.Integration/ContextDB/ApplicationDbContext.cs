@@ -23,11 +23,20 @@ namespace Crayon.Cloud.Sales.Integration.ContextDB
           .WithMany(c => c.Accounts)
           .HasForeignKey(a => a.CustomerId)
           .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Account to Subscription relationship
             modelBuilder.Entity<SubscriptionDB>()
-                .HasOne(l => l.Account)
-                .WithMany(a => a.Subscriptions)
-                .HasForeignKey(l => l.AccountId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(s => s.Account) // One Subscription has one Account
+                .WithMany(a => a.Subscriptions) // One Account has many Subscriptions
+                .HasForeignKey(s => s.AccountId) // FK in Subscription
+                .OnDelete(DeleteBehavior.Cascade); // Cascade on delete
+
+            // Configure Customer to Subscription relationship
+            modelBuilder.Entity<SubscriptionDB>()
+                .HasOne(s => s.Customer) // One Subscription has one Customer
+                .WithMany() // No navigation property in CustomerDB
+                .HasForeignKey(s => s.CustomerId) // FK in Subscription
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade on delete
         }
     }
 }

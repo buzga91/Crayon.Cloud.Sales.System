@@ -5,6 +5,7 @@ using Crayon.Cloud.Sales.Integration.ContextDB;
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Integration.Repositories;
 using Crayon.Cloud.Sales.Integration.SwaggerRequestExamples;
+using Crayon.Cloud.Sales.WebAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -26,7 +27,6 @@ internal class Program
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -51,6 +51,7 @@ internal class Program
             app.UseSwaggerUI();
         }
 
+        app.UseMiddleware<MockAuthenticationMiddleware>();
         using (var scope = app.Services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -58,6 +59,7 @@ internal class Program
         }
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
 

@@ -20,7 +20,7 @@ namespace Crayon.Cloud.Sales.Integration.Repositories
             if (customer == null)
             {
                 string message = $"There is no customer for specifi id:{customerId}";
-                Console.WriteLine(message);
+                Logger.LogError(message);
                 return Result<CustomerDB>.Failure(message);
             }
             return Result<CustomerDB>.Success(customer);

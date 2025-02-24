@@ -2,7 +2,6 @@
 using Crayon.Cloud.Sales.Integration.Contracts;
 using Crayon.Cloud.Sales.Shared;
 using Crayon.Cloud.Sales.Shared.DTO;
-using System.Collections.Generic;
 
 namespace Crayon.Cloud.Sales.Application.Services
 {

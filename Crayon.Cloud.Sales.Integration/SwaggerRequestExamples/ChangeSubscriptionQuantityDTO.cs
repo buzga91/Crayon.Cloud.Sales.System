@@ -9,7 +9,7 @@ namespace Crayon.Cloud.Sales.Integration.SwaggerRequestExamples
         {
             return new ChangeSubscriptionQuantityDTO
             {
-                SubscriptionId = 3,
+                SubscriptionId = 2,
                 NewQuantity = 10
             };
         }
