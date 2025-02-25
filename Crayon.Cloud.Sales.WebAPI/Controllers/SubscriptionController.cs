@@ -20,6 +20,10 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             _SubscriptionService = SubscriptionService;
         }
 
+        /// <summary>
+        /// Get available softwares from thir-party CCP.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("softwares")]
         public async Task<IActionResult> GetAvailableSoftwares()
         {
@@ -37,6 +41,11 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Cancel existing subscription
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
         [HttpPatch("cancel/{subscriptionId}")]
         [RoutParameterValidation]
         public async Task<IActionResult> CancelSubscription(int subscriptionId)
@@ -54,7 +63,11 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Extend subscription valid to date time.
+        /// </summary>
+        /// <param name="extendSubscriptionValidDate"></param>
+        /// <returns></returns>
         [HttpPatch("extend")]
         [SwaggerRequestExample(typeof(ExtendSubscriptionValidDateDTO), typeof(ExtendSubscriptionValidDateDTOExample))]
         public async Task<IActionResult> ExtendSubscriptionValidDate([FromBody] ExtendSubscriptionValidDateDTO extendSubscriptionValidDate)
@@ -73,6 +86,11 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Change subscription license quantity.
+        /// </summary>
+        /// <param name="changeSubscriptionQuantityDTO"></param>
+        /// <returns></returns>
         [HttpPatch("changeLicense")]
         [SwaggerRequestExample(typeof(ChangeSubscriptionQuantityDTO), typeof(ChangeSubscriptionQuantityDTOExample))]
         public async Task<IActionResult> ChangeSubscriptionQuantity([FromBody] ChangeSubscriptionQuantityDTO changeSubscriptionQuantityDTO)
@@ -90,6 +108,11 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Provision new subscription. Provisioning is done on third-party CCP, and in the Crayon system.
+        /// </summary>
+        /// <param name="provisionSubscription"></param>
+        /// <returns></returns>
         [HttpPost("provision")]
         [SwaggerRequestExample(typeof(ProvisionSubscriptionDTO), typeof(ProvisionSubscriptionDTOExample))]
         public async Task<IActionResult> ProvisionSubscription([FromBody] ProvisionSubscriptionDTO provisionSubscription)

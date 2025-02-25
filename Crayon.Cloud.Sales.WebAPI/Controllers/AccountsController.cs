@@ -14,6 +14,11 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             _accountService = accountService;
         }
 
+        /// <summary>
+        /// The idea is to mock the authentication layer and get customer ID from claims.
+        /// </summary>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="ArithmeticException"></exception>
         private void MockAuthentication()
         {
             var customerIdClaim = User.FindFirst("CustomerId");
@@ -29,6 +34,10 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             _customerId = customerId;
         }
 
+        /// <summary>
+        /// Get all accounts that contain purchased subscriptions.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("subscriptions")]
         public async Task<IActionResult> GetAccountsWithPurchasedSubscriptions()
         {
@@ -43,7 +52,7 @@ namespace Crayon.Cloud.Sales.WebAPI.Controllers
             }
         }
         /// <summary>
-        /// Return All accounts for speficif customer.
+        ///  Return all accounts for the specific customer.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
